@@ -30,6 +30,15 @@ R<Object> execute = Context.Instance.getDynamicApiEngine().execute(handleDTO);
 
 
 
+```java
+//api参数entity
+WFHandleDTO handleDTO;
+//调用ServerApi
+R<Object> execute = Context.Instance.getDynamicApiEngine().execute(handleDTO);
+```
+
+
+
 在这里，我们将展示一些常用的工作流引擎API调用示例，包括：
 
 - **AttachWorkflow**
@@ -38,84 +47,84 @@ R<Object> execute = Context.Instance.getDynamicApiEngine().execute(handleDTO);
   
   * API传参：
   
-  | 参数名称       | 参数类型             | 参数描述   |
-  | -------------- | -------------------- | ---------- |
+  | 参数名称           | 参数类型                 | 参数描述  |
+  | -------------- | -------------------- | ----- |
   | contextObj     | ICIMWorkflowTemplate | 工作流模板 |
   | contextObjs(0) | ICIMWorkflowItem     | 工作流对象 |
   
   * 返回值：
-  
+    
     `null`
-  
+
 - **Approve**
-
+  
   用于批准工作流
-
+  
   * API传参：
   
-  | 参数名称                | 参数类型               | 参数描述           |
-  | ----------------------- | ---------------------- | ------------------ |
-  | requestParam：handleMsg | String                 | 审批消息           |
-  | requestParam：toNextMsg | String                 | 下一步消息         |
-  | contextObj              | ICIMWorkflowStepObject | 工作流步骤实例对象 |
+  | 参数名称                   | 参数类型                   | 参数描述      |
+  | ---------------------- | ---------------------- | --------- |
+  | requestParam：handleMsg | String                 | 审批消息      |
+  | requestParam：toNextMsg | String                 | 下一步消息     |
+  | contextObj             | ICIMWorkflowStepObject | 工作流步骤实例对象 |
   
   * 返回值：
     `null`
 
 - **Reject**
-
+  
   用于拒绝工作流
-
+  
   * API传参：
   
-  | 参数名称                | 参数类型               | 参数描述           |
-  | ----------------------- | ---------------------- | ------------------ |
-  | requestParam：handleMsg | String                 | 审批消息           |
-  | requestParam：toNextMsg | String                 | 下一步消息         |
-  | contextObj              | ICIMWorkflowStepObject | 工作流步骤实例对象 |
+  | 参数名称                   | 参数类型                   | 参数描述      |
+  | ---------------------- | ---------------------- | --------- |
+  | requestParam：handleMsg | String                 | 审批消息      |
+  | requestParam：toNextMsg | String                 | 下一步消息     |
+  | contextObj             | ICIMWorkflowStepObject | 工作流步骤实例对象 |
   
   * 返回值：
     `null`
-  
+
 - **Claim**
-
+  
   用于申领工作流
-
+  
   * API传参：
   
-  | 参数名称                | 参数类型               | 参数描述           |
-  | ----------------------- | ---------------------- | ------------------ |
-  | requestParam：handleMsg | String                 | 审批消息           |
-  | contextObj              | ICIMWorkflowStepObject | 工作流步骤实例对象 |
-
+  | 参数名称                   | 参数类型                   | 参数描述      |
+  | ---------------------- | ---------------------- | --------- |
+  | requestParam：handleMsg | String                 | 审批消息      |
+  | contextObj             | ICIMWorkflowStepObject | 工作流步骤实例对象 |
+  
   * 返回值：
     `null`
 
 - **Assign**
-
+  
   用于分配工作流负责人
-
+  
   * API传参：
   
-  | 参数名称       | 参数类型               | 参数描述           |
-  | -------------- | ---------------------- | ------------------ |
-  | contextObjs(0) | IObject                | 人员或角色         |
+  | 参数名称           | 参数类型                   | 参数描述      |
+  | -------------- | ---------------------- | --------- |
+  | contextObjs(0) | IObject                | 人员或角色     |
   | contextObj     | ICIMWorkflowStepObject | 工作流步骤实例对象 |
-
+  
   * 返回值：
     `null`
 
 - **Reassign**
-
+  
   用于重新分配工作流负责人
-
+  
   * API传参：
   
-  | 参数名称       | 参数类型               | 参数描述           |
-  | -------------- | ---------------------- | ------------------ |
-  | contextObjs(0) | IObject                | 人员或角色         |
+  | 参数名称           | 参数类型                   | 参数描述      |
+  | -------------- | ---------------------- | --------- |
+  | contextObjs(0) | IObject                | 人员或角色     |
   | contextObj     | ICIMWorkflowStepObject | 工作流步骤实例对象 |
-
+  
   * 返回值：
     `null`
 
@@ -125,11 +134,11 @@ R<Object> execute = Context.Instance.getDynamicApiEngine().execute(handleDTO);
 
 可以通过`ICIMWorkflowStepDefinition`接口的以下属性，来运行自定义Handler
 
-| 接口  | 属性  | 描述  |
-| --- | --- | --- |
-| ICIMWorkflowStepDefinition | CIMWorkStepDefinitionPostHandler | 后处理Hander |
-| ICIMWorkflowStepDefinition | CIMWorkStepDefinitionPreHandler | 预处理      Handler |
-| ICIMWorkflowStepDefinition | CIMWorkStepAutoCommitAfterHandler | 自动异步处理Handler |
+| 接口                         | 属性                                | 描述               |
+| -------------------------- | --------------------------------- | ---------------- |
+| ICIMWorkflowStepDefinition | CIMWorkStepDefinitionPostHandler  | 后处理Hander        |
+| ICIMWorkflowStepDefinition | CIMWorkStepDefinitionPreHandler   | 预处理      Handler |
+| ICIMWorkflowStepDefinition | CIMWorkStepAutoCommitAfterHandler | 自动异步处理Handler    |
 
 自定义Handler示例：
 
@@ -206,83 +215,77 @@ public class Processhandler extends WorkflowProcessStepHandlerBase {
 这里将展示一些常用的分析引擎API调用示例，包括：
 
 - **创建数据分析任务**
-
+  
   * 参数：
   
   | 参数名称 | 参数类型 | 参数描述 |
-  | -------- | -------- | -------- |
-  |          |          |          |
-  |          |          |          |
-
+  | ---- | ---- | ---- |
+  |      |      |      |
+  |      |      |      |
+  
   * 返回值：
 
-
 - **获取分析结果**
-
+  
   参数：
   
   | 参数名称 | 参数类型 | 参数描述 |
-  | -------- | -------- | -------- |
-  |          |          |          |
-  |          |          |          |
-
-
+  | ---- | ---- | ---- |
+  |      |      |      |
+  |      |      |      |
 
 - **导出分析报告**
-
+  
   * 参数：
   
   | 参数名称 | 参数类型 | 参数描述 |
-  | -------- | -------- | -------- |
-  |          |          |          |
-  |          |          |          |
+  | ---- | ---- | ---- |
+  |      |      |      |
+  |      |      |      |
   
   * 返回值：
 
 
-### 操作步骤
+#### 操作步骤
 
 这一部分将指导您如何进行分析引擎的二次开发操作，包括：
 
 - **安装分析引擎插件**
-
+  
   * 参数：
   
   | 参数名称 | 参数类型 | 参数描述 |
-  | -------- | -------- | -------- |
-  |          |          |          |
-  |          |          |          |
+  | ---- | ---- | ---- |
+  |      |      |      |
+  |      |      |      |
   
   * 返回值：
-
-
 
 - **配置分析任务参数**
-
+  
   * 参数：
   
   | 参数名称 | 参数类型 | 参数描述 |
-  | -------- | -------- | -------- |
-  |          |          |          |
-  |          |          |          |
+  | ---- | ---- | ---- |
+  |      |      |      |
+  |      |      |      |
   
   * 返回值：
-
-
 
 - **定制分析算法**
-
+  
   * 参数：
   
   | 参数名称 | 参数类型 | 参数描述 |
-  | -------- | -------- | -------- |
-  |          |          |          |
-  |          |          |          |
+  | ---- | ---- | ---- |
+  |      |      |      |
+  |      |      |      |
   
   * 返回值：
 
 
-## 报表引擎
+
+### 报表引擎
 
 在这一部分，我们将介绍如何使用报表引擎进行二次开发，并提供一些API调用示例和操作步骤。
 
@@ -291,39 +294,35 @@ public class Processhandler extends WorkflowProcessStepHandlerBase {
 这里将展示一些常用的报表引擎API调用示例，包括：
 
 - **创建报表模板**
-
+  
   * 参数：
   
   | 参数名称 | 参数类型 | 参数描述 |
-  | -------- | -------- | -------- |
-  |          |          |          |
-  |          |          |          |
+  | ---- | ---- | ---- |
+  |      |      |      |
+  |      |      |      |
   
   * 返回值：
-
-
 
 - **填充数据到报表**
-
+  
   * 参数：
   
   | 参数名称 | 参数类型 | 参数描述 |
-  | -------- | -------- | -------- |
-  |          |          |          |
-  |          |          |          |
+  | ---- | ---- | ---- |
+  |      |      |      |
+  |      |      |      |
   
   * 返回值：
 
-
-
 - **导出报表**
-
+  
   * 参数：
   
   | 参数名称 | 参数类型 | 参数描述 |
-  | -------- | -------- | -------- |
-  |          |          |          |
-  |          |          |          |
+  | ---- | ---- | ---- |
+  |      |      |      |
+  |      |      |      |
   
   * 返回值：
 
@@ -332,44 +331,40 @@ public class Processhandler extends WorkflowProcessStepHandlerBase {
 这一部分将指导您如何进行报表引擎的二次开发操作，包括：
 
 - **安装报表引擎插件**
-
+  
   * 参数：
   
   | 参数名称 | 参数类型 | 参数描述 |
-  | -------- | -------- | -------- |
-  |          |          |          |
-  |          |          |          |
+  | ---- | ---- | ---- |
+  |      |      |      |
+  |      |      |      |
   
   * 返回值：
-
-
 
 - **设计报表模板**
-
+  
   * 参数：
   
   | 参数名称 | 参数类型 | 参数描述 |
-  | -------- | -------- | -------- |
-  |          |          |          |
-  |          |          |          |
+  | ---- | ---- | ---- |
+  |      |      |      |
+  |      |      |      |
   
   * 返回值：
-
-
 
 - **生成报表数据源**
-
+  
   * 参数：
   
   | 参数名称 | 参数类型 | 参数描述 |
-  | -------- | -------- | -------- |
-  |          |          |          |
-  |          |          |          |
+  | ---- | ---- | ---- |
+  |      |      |      |
+  |      |      |      |
   
   * 返回值：
 
 
-## QMS质量管理引擎
+### QMS质量管理引擎
 
 在这一部分，我们将介绍如何使用QMS质量管理引擎进行二次开发，并提供一些API调用示例和操作步骤。
 
@@ -377,15 +372,11 @@ public class Processhandler extends WorkflowProcessStepHandlerBase {
 
 这里将展示一些常用的QMS质量管理引擎API调用示例，包括：
 
-- 
-
-### 操作步骤
+- #### 操作步骤
 
 这一部分将指导您如何进行QMS质量管理引擎的二次开发操作，包括：
 
-- 
-
-## 结论
+- ## 结论
 
 本文档提供了IMC软件中工作流引擎、分析引擎、报表引擎和QMS质量管理引擎的二次开发示例和操作指南。通过按照文档中的步骤进行操作，您可以扩展和自定义IMC软件以满足特定的业务需求。
 
