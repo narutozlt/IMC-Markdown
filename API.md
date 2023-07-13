@@ -19,27 +19,72 @@
 
 在这一部分，我们将介绍如何使用工作流引擎进行二次开发，并提供一些API调用示例和操作步骤。
 
+### Schema
+
+#### 接口：
+
+#### 枚举：
+
+#### 属性：
+
+| uid                                      | name                                     | description  | displayName  | isActivated | rev | ver | propertyValueType | propertyValueTypeDetails | isMandatory | isDbField | HistoryRetained | fieldLength | exposedInterfaceDefUid     | containerId  |
+| ---------------------------------------- | ---------------------------------------- | ------------ | ------------ | ----------- | --- | --- | ----------------- | ------------------------ | ----------- | --------- | --------------- | ----------- | -------------------------- | ------------ |
+| WorkflowStepStartDate                    | WorkflowStepStartDate                    | 开始日期         | 开始日期         | TRUE        | 1.0 | 0.1 | DateTime          |                          | FALSE       | TRUE      | FALSE           |             | ICIMWorkflowStep           | CIM.WORKFLOW |
+| WorkflowStepEndDate                      | WorkflowStepEndDate                      | 结束日期         | 结束日期         | TRUE        | 1.0 | 0.1 | DateTime          |                          | FALSE       | TRUE      | FALSE           |             | ICIMWorkflowStep           | CIM.WORKFLOW |
+| WorkflowStepDuration                     | WorkflowStepDuration                     | 持续时间         | 持续时间         | TRUE        | 1.0 | 0.1 | Integer           |                          | FALSE       | TRUE      | FALSE           |             | ICIMWorkflowStep           | CIM.WORKFLOW |
+| WorkflowStepStatus                       | WorkflowStepStatus                       | 状态           | 状态           | TRUE        | 1.0 | 0.1 | EnumList          | ELT_WorkflowStepStatus   | FALSE       | TRUE      | FALSE           | 64          | ICIMWorkflowStep           | CIM.WORKFLOW |
+| WorkflowStepWarningTime                  | WorkflowStepWarningTime                  | 预警时间         | 预警时间         | TRUE        | 1.0 | 0.1 | Integer           |                          | FALSE       | TRUE      | FALSE           |             | ICIMWorkflowStep           | CIM.WORKFLOW |
+| WorkflowStepPrincipalPrescription        | WorkflowStepPrincipalPrescription        | 委托人权限时效      | 委托人权限时效      | TRUE        | 1.0 | 0.1 | Integer           |                          | FALSE       | TRUE      | FALSE           |             | ICIMWorkflowStep           | CIM.WORKFLOW |
+| WorkflowStepDefProcessHandler            | WorkflowStepDefProcessHandler            | 处理器          | 处理器          | TRUE        | 1.0 | 0.1 | String            |                          | TRUE        | TRUE      | FALSE           |             | ICIMWorkflowStepDefinition | CIM.WORKFLOW |
+| WorkflowStepDefMaxAllowLine              | WorkflowStepDefMaxAllowLine              | 步骤定义允许的最大连接线 | 步骤定义允许的最大连接线 | TRUE        | 1.0 | 0.1 | Integer           |                          | TRUE        | TRUE      | FALSE           |             | ICIMWorkflowStepDefinition | CIM.WORKFLOW |
+| WorkflowItemStatus                       | WorkflowItemStatus                       | 工作流状态        | 工作流状态        | TRUE        | 1.0 | 0.1 | String            |                          | FALSE       | TRUE      | FALSE           | 128         | ICIMWorkflowItem           | CIM.WORKFLOW |
+| WorkflowStatus                           | WorkflowStatus                           | 状态           | 状态           | TRUE        | 1.0 | 0.1 | EnumList          | ELT_WorkflowStatus       | FALSE       | TRUE      | FALSE           | 64          | ICIMWorkflowObject         | CIM.WORKFLOW |
+| WorkflowMessage                          | WorkflowMessage                          | 过程信息         | 过程信息         | TRUE        | 1.0 | 0.1 | String            |                          | FALSE       | TRUE      | FALSE           | 1024        | ICIMWorkflowObject         | CIM.WORKFLOW |
+| WorkflowRemark                           | WorkflowRemark                           | 备注信息         | 备注信息         | TRUE        | 1.0 | 0.1 | String            |                          | FALSE       | TRUE      | FALSE           | 1024        | ICIMWorkflowObject         | CIM.WORKFLOW |
+| WorkflowErrorMsg                         | WorkflowErrorMsg                         | 错误信息         | 错误信息         | TRUE        | 1.0 | 0.1 | String            |                          | FALSE       | TRUE      | FALSE           | 1024        | ICIMWorkflowObject         | CIM.WORKFLOW |
+| WorkflowDetailStatus                     | WorkflowDetailStatus                     | 详细状态         | 详细状态         | TRUE        | 1.0 | 0.1 | String            |                          | FALSE       | TRUE      | FALSE           | 1024        | ICIMWorkflowObject         | CIM.WORKFLOW |
+| TemplateFrontInfo                        | TemplateFrontInfo                        | 前端模板信息       | 前端模板信息       | TRUE        | 1.0 | 0.1 | LongText          |                          | TRUE        | TRUE      | FALSE           |             | ICIMWorkflowTemplate       | CIM.WORKFLOW |
+| EffectiveInterface                       | EffectiveInterface                       | 生效的接口信息      | 生效的接口信息      | TRUE        | 1.0 | 0.1 | String            |                          | FALSE       | TRUE      | FALSE           | 512         | ICIMWorkflowTemplate       | CIM.WORKFLOW |
+| FrontStepId                              | FrontStepId                              | 前端步骤id       | 前端步骤id       | TRUE        | 1.0 | 0.1 | String            |                          | TRUE        | TRUE      | FALSE           | 64          | ICIMWorkflowStepTemplate   | CIM.WORKFLOW |
+| WorkflowStepMsgFromPreviousStep          | WorkflowStepMsgFromPreviousStep          | 上一步消息        | 上一步消息        | TRUE        | 1.0 | 0.1 | RichText          |                          | FALSE       | TRUE      | FALSE           | 1024        | ICIMWorkflowStep           | CIM.WORKFLOW |
+| WorkflowStepComments                     | WorkflowStepComments                     | 评论           | 评论           | TRUE        | 1.0 | 0.1 | String            |                          | FALSE       | TRUE      | FALSE           | 1024        | ICIMWorkflowStep           | CIM.WORKFLOW |
+| WorkflowStepClaimedInd                   | WorkflowStepClaimedInd                   | 是否认领         | 是否认领         | TRUE        | 1.0 | 0.1 | Boolean           |                          | FALSE       | TRUE      | FALSE           |             | ICIMWorkflowStep           | CIM.WORKFLOW |
+| WorkflowStepGroupAssignInd               | WorkflowStepGroupAssignInd               | 分发标识         | 分发标识         | TRUE        | 1.0 | 0.1 | String            |                          | FALSE       | TRUE      | FALSE           | 64          | ICIMWorkflowStep           | CIM.WORKFLOW |
+| WorkflowStepParallelExpansionInd         | WorkflowStepParallelExpansionInd         | 并行标识         | 并行标识         | TRUE        | 1.0 | 0.1 | Boolean           |                          | FALSE       | TRUE      | FALSE           |             | ICIMWorkflowStep           | CIM.WORKFLOW |
+| WorkflowOnHoldInd                        | WorkflowOnHoldInd                        | 暂停标识         | 暂停标识         | TRUE        | 1.0 | 0.1 | Boolean           |                          | FALSE       | TRUE      | FALSE           |             | ICIMWorkflowObject         | CIM.WORKFLOW |
+| WorkflowRev                              | WorkflowRev                              | 工作流版本        | 工作流版本        | TRUE        | 1.0 | 0.1 | Integer           |                          | FALSE       | TRUE      | FALSE           |             | ICIMWorkflowObject         | CIM.WORKFLOW |
+| WorkflowStepRecipientExpandedFromRoleInd | WorkflowStepRecipientExpandedFromRoleInd | 按角色分发标识      | 按角色分发标识      | TRUE        | 1.0 | 0.1 | Boolean           |                          | FALSE       | TRUE      | FALSE           |             | ICIMWorkflowStepRecipient  | CIM.WORKFLOW |
+| WorkflowImportance                       | WorkflowImportance                       | 流程等级         | 流程等级         | TRUE        | 1.0 | 0.1 | EnumList          | ELT_WorkflowImportance   | TRUE        | TRUE      | FALSE           | 64          | ICIMWorkflow               | CIM.WORKFLOW |
+| WorkflowStepLegendTextColor              | WorkflowStepLegendTextColor              | 步骤图例的文字颜色    | 步骤图例的文字颜色    | TRUE        | 1.0 | 0.1 | String            |                          | FALSE       | TRUE      | FALSE           | 64          | ICIMWorkflowStepLegend     | CIM.WORKFLOW |
+| WorkflowStepLegendIcon                   | WorkflowStepLegendIcon                   | 步骤图例的图标      | 步骤图例的图标      | TRUE        | 1.0 | 0.1 | String            |                          | FALSE       | TRUE      | FALSE           | 64          | ICIMWorkflowStepLegend     | CIM.WORKFLOW |
+| WorkflowStepLegendTitle                  | WorkflowStepLegendTitle                  | 步骤图例的标题      | 步骤图例的标题      | TRUE        | 1.0 | 0.1 | String            |                          | FALSE       | TRUE      | FALSE           | 64          | ICIMWorkflowStepLegend     | CIM.WORKFLOW |
+| WorkflowStepLegendBackgroundColor        | WorkflowStepLegendBackgroundColor        | 步骤图例的背景色     | 步骤图例的背景色     | TRUE        | 1.0 | 0.1 | String            |                          | FALSE       | TRUE      | FALSE           | 64          | ICIMWorkflowStepLegend     | CIM.WORKFLOW |
+| WorkflowStepAcceptPercentage             | WorkflowStepAcceptPercentage             | 步骤通过百分比      | 步骤通过百分比      | TRUE        | 1.0 | 0.1 | Integer           |                          | FALSE       | TRUE      | FALSE           |             | ICIMWorkflowStep           | CIM.WORKFLOW |
+| WorkflowStepRejectPercentage             | WorkflowStepRejectPercentage             | 步骤拒绝百分比      | 步骤拒绝百分比      | TRUE        | 1.0 | 0.1 | Integer           |                          | FALSE       | TRUE      | FALSE           |             | ICIMWorkflowStep           | CIM.WORKFLOW |
+| WorkflowPercentage                       | WorkflowPercentage                       | 工作流完成百分比     | 工作流完成百分比     | TRUE        | 1.0 | 0.1 | Integer           |                          | FALSE       | TRUE      | FALSE           |             | ICIMWorkflowObject         | CIM.WORKFLOW |
+
+#### 关联关系：
+
+#### 类型：
+
+#### 步骤类型：
+
+#### 步骤状态：
+
+
+
+
+
+
+
 ### ServerAPI调用示例
 
 ```java
 //api参数entity
 WFHandleDTO handleDTO;
 //调用ServerApi
-R<Object> execute = Context.Instance.getDynamicApiEngine().execute(handleDTO);
+R<Object> execute = Context.Instance.getDynamicApiEngine().execute(handleDTO);在这里，我们将展示一些常用的工作流引擎API调用示例，包括：
 ```
-
-
-
-```java
-//api参数entity
-WFHandleDTO handleDTO;
-//调用ServerApi
-R<Object> execute = Context.Instance.getDynamicApiEngine().execute(handleDTO);
-```
-
-
-
-在这里，我们将展示一些常用的工作流引擎API调用示例，包括：
 
 - **AttachWorkflow**
   
@@ -139,6 +184,12 @@ R<Object> execute = Context.Instance.getDynamicApiEngine().execute(handleDTO);
 | ICIMWorkflowStepDefinition | CIMWorkStepDefinitionPostHandler  | 后处理Hander        |
 | ICIMWorkflowStepDefinition | CIMWorkStepDefinitionPreHandler   | 预处理      Handler |
 | ICIMWorkflowStepDefinition | CIMWorkStepAutoCommitAfterHandler | 自动异步处理Handler    |
+
+步骤流转示意图：
+
+
+
+
 
 自定义Handler示例：
 
@@ -245,8 +296,7 @@ public class Processhandler extends WorkflowProcessStepHandlerBase {
   
   * 返回值：
 
-
-#### 操作步骤
+### 操作步骤
 
 这一部分将指导您如何进行分析引擎的二次开发操作，包括：
 
@@ -282,8 +332,6 @@ public class Processhandler extends WorkflowProcessStepHandlerBase {
   |      |      |      |
   
   * 返回值：
-
-
 
 ### 报表引擎
 
@@ -363,8 +411,7 @@ public class Processhandler extends WorkflowProcessStepHandlerBase {
   
   * 返回值：
 
-
-### QMS质量管理引擎
+## QMS质量管理引擎
 
 在这一部分，我们将介绍如何使用QMS质量管理引擎进行二次开发，并提供一些API调用示例和操作步骤。
 
@@ -372,11 +419,11 @@ public class Processhandler extends WorkflowProcessStepHandlerBase {
 
 这里将展示一些常用的QMS质量管理引擎API调用示例，包括：
 
-- #### 操作步骤
+### 操作步骤
 
 这一部分将指导您如何进行QMS质量管理引擎的二次开发操作，包括：
 
-- ## 结论
+### 结论
 
 本文档提供了IMC软件中工作流引擎、分析引擎、报表引擎和QMS质量管理引擎的二次开发示例和操作指南。通过按照文档中的步骤进行操作，您可以扩展和自定义IMC软件以满足特定的业务需求。
 
