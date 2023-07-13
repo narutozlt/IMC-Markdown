@@ -295,7 +295,7 @@ R<Object> execute = Context.Instance.getDynamicApiEngine().execute(handleDTO);�
 
 **步骤流转示意图：**
 
-![](.\workflow.jpg)
+![](./img/workflow.jpg)
 
 
 
