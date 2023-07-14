@@ -491,7 +491,7 @@ public class Processhandler extends WorkflowProcessStepHandlerBase {
 
 - **获取报表参数列表**
 
-  获取指定报表生成时，需要输入打参数列表
+  获取指定报表生成时，需要输入的参数列表
 
   * API传参：
 
