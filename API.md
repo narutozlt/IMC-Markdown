@@ -459,6 +459,8 @@ When Min2>0, then Delete21 should be set to True.
 
 3.Excel配置schema介绍，导出成xml并导入到imc介绍
 
+4.Schema操作代码示例
+
 ## 基座引擎
 
 ## 工作流引擎
