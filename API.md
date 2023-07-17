@@ -19,219 +19,150 @@
 
 1.schema概念介绍（面向对象，类型，接口，属性，关联关系，枚举），最好一个类型举个简单例子和图
 
-# Schema Concepts
+## Schema Concepts
 
-The data model is the structure that defines what information you can store in your
- database and what relationships objects can have with each other. For example, the
- data model defines what attributes can define a tag. It also describes the relationships
- a document can have with other objects, such as plants or projects, contracts, or
- organizations.
+数据模型是定义可以在数据库中存储哪些信息以及对象之间可以具有哪些关系的结构。 例如，数据模型定义了哪些属性可以定义标签。 它还描述了文档与其他对象（例如工厂或项目、合同或组织）之间的关系。
 
-A schema comprises a number of components that work together to define your data,
- including:
+schema由许多组件组成，这些组件一起工作来定义您的数据，
+ 包括：
 
-- Class definition - A named description of a set of objects that play similar roles
-   and share some of the same properties and relationships.
+- **类定义** - 对一组扮演类似角色并共享一些相同属性和关系的对象的命名描述。
+   
+  例如，作为组织实例的对象可以扮演以下角色中的一个或多个：内部组织、外部组织、供应商、制造商或承包商。
   
-  For example, an object that is an instance of an organization may play one or more
-   of the following roles: internal organization, external organization, supplier, manufacturer,
-   or contractor.
-
-- Interface definition - A collection of properties available to an object that, as
-   a set, represent the role an object plays. Interface definitions also represent the
-   ends of relationship definitions.
+- **接口定义** - 对象可用的属性集合，作为一个集合，代表对象所扮演的角色。 接口定义也代表关系定义的结束。
+   
+   每个角色都由不同的接口定义表示，该定义公开属性并支持特定于该角色的关系。
   
-  Each role is represented by a different interface definition that exposes properties
-   and supports relationships specific to that role.
-
-- Relationship definition - A definition of how objects can be related to each other.
+- **关联定义** - 对象如何相互关联的定义。
   
-  For example, a relationship definition describes the relationship that can exist between
-   an organization and a contract. The relationship definition can include information
-   such as how many organizations each contract can be related to and what happens to
-   an organization when a contract is deleted.
+  例如，关系定义描述了组织和合同之间可能存在的关系。 关系定义可以包括诸如每个合同可以与多少个组织相关以及删除合同时组织会发生什么等信息。
+  
+- **属性定义** - 描述对象的属性。 属性通过接口定义与类定义相关。
 
-- Property definition - Attributes that describe objects. Properties are related to
-   a class definition through an interface definition.
+### 类定义
 
-### Class definitions
+类定义是一组对象的命名描述，这些对象支持或实现相同的接口定义并共享相同的属性定义和关系。 在模式中，类定义可以表示物理事物（例如泵）或概念事物（例如项目）。
 
-A class definition is a named description of a set of objects that support or realize
- the same interface definitions and share the same property definitions and relationships.
- In the schema, class definitions can represent physical things, such as pumps, or
- conceptual things, such as projects.
+类定义具有以下特点：
 
-Class definitions have the following characteristics:
+- 每个类定义都属于一个且仅一个组件模式。
 
-- Every class definition belongs to one and only one component schema.
+- 每个类定义都有一个主要接口定义，它定义了类定义的一组可能的角色（接口定义）。
+   
+- 类定义的每个实例都由factory类实例化。
 
-- Every class definition has a primary interface definition that defines the set of
-   possible roles (interface definitions) for the class definition.
+**类定义和接口定义**
 
-- Every instance of a class definition is instantiated by a class factory.
+类定义提供了软件可以与之交互的不同角色。 类定义通过称为接口定义的抽象实体来公开或实现其角色。
 
-Class definitions and interface definitions
+类定义与接口定义具有实现关系。 这意味着特定类定义的实例支持或实现已实现的接口定义。
 
-Class definitions offer different roles with which the software can interact. Class
- definitions expose or realize their roles through abstract entities called interface
- definitions.
+![SHARED Tip](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAANCAIAAAC7P9CBAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTExIDc5LjE1ODMyNSwgMjAxNS8wOS8xMC0wMToxMDoyMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkMmJjM2E2OS00YTUyLTdlNDgtODFkYS05ZDFhOTA0N2U3NTIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NDMwMUM5MDgyREM4MTFFNjk3NzY4MjA2NEMwMDc1NzciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NDMwMUM5MDcyREM4MTFFNjk3NzY4MjA2NEMwMDc1NzciIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ODdhMTM4MzYtMjc5MC03YTRiLThmODktODI2NTIxNjQ3N2M4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmQyYmMzYTY5LTRhNTItN2U0OC04MWRhLTlkMWE5MDQ3ZTc1MiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PoAZ1o0AAAEjSURBVHjaYvz//z/DAAEWOOvjL4bKswwzb4LY6eoM7cYM/GwoShmrj+Mx6H+rJVwNhI1Vy+xA5RQTMQibCUL9/c8gtIxh+g2Gf/9BCMgAcv/SIERS19/devM9ir93PgVZiQyAXKCglwy6z5A9hCyCBxxK1bZV4AMy7GdfPfTgk8+iGxCNUH/HHETXIMiGRZA8wMvODGEcTNUGWcnIgBLmmOD9L5qnNajdZ/wwEiETFkEKgUb/BUhsosS3Ei/DLGuGtKMwFzEyTLMECVIFGE65BGezszDtSdJCz2OpaiBEazDFV9FGnhfdbiBYepchGez1udYM0cpUs+98jp6BJDe+sgUIgPZR0Upi0xrc3xyLQAjIoGuZCgSWYgxJqlAGHQBAgAEAhy9Y5GqbRX4AAAAASUVORK5CYII=) 使用 Realizes 关系上的 IsRequired 标志来指定特定类定义的对象是否必须具有接口定义，或者是可选的。
 
-Class definitions have a Realizes relationship with interface definitions. This means
- that instances of a particular class definition support or implement the realized
- interface definitions.
+类定义还必须实现隐式接口定义。 如果一个接口定义隐含另一个接口定义，则任何实现第一个接口定义的类定义也必须实现隐含的接口定义。
 
-![SHARED Tip](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAANCAIAAAC7P9CBAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTExIDc5LjE1ODMyNSwgMjAxNS8wOS8xMC0wMToxMDoyMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkMmJjM2E2OS00YTUyLTdlNDgtODFkYS05ZDFhOTA0N2U3NTIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NDMwMUM5MDgyREM4MTFFNjk3NzY4MjA2NEMwMDc1NzciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NDMwMUM5MDcyREM4MTFFNjk3NzY4MjA2NEMwMDc1NzciIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ODdhMTM4MzYtMjc5MC03YTRiLThmODktODI2NTIxNjQ3N2M4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmQyYmMzYTY5LTRhNTItN2U0OC04MWRhLTlkMWE5MDQ3ZTc1MiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PoAZ1o0AAAEjSURBVHjaYvz//z/DAAEWOOvjL4bKswwzb4LY6eoM7cYM/GwoShmrj+Mx6H+rJVwNhI1Vy+xA5RQTMQibCUL9/c8gtIxh+g2Gf/9BCMgAcv/SIERS19/devM9ir93PgVZiQyAXKCglwy6z5A9hCyCBxxK1bZV4AMy7GdfPfTgk8+iGxCNUH/HHETXIMiGRZA8wMvODGEcTNUGWcnIgBLmmOD9L5qnNajdZ/wwEiETFkEKgUb/BUhsosS3Ei/DLGuGtKMwFzEyTLMECVIFGE65BGezszDtSdJCz2OpaiBEazDFV9FGnhfdbiBYepchGez1udYM0cpUs+98jp6BJDe+sgUIgPZR0Upi0xrc3xyLQAjIoGuZCgSWYgxJqlAGHQBAgAEAhy9Y5GqbRX4AAAAASUVORK5CYII=) Use the IsRequired flag on the Realizes relationship to specify if an object of the particular class
- definition must have the interface definition or if it is optional.
+**类定义和属性定义**
 
-Class definitions must also realize implied 
-interface definitions. If an interface definition implies another 
-interface definition, then any class definition
- that realizes the first interface definition must also realize the
- implied interface
- definition.
+类定义由属性定义组成，可以共享属性定义，但不能共享与属性关联的数据。 接口定义通过将属性定义组合在称为接口定义的命名集合中来公开类定义的属性定义。
 
-Class definitions and property definitions
+类定义的特化
 
-Class definitions are made up of property definitions and can share property definitions,
- but not the data associated with the properties. Interface definitions expose the
- property definitions for class definitions by combining the property definitions in
- a named collection called an interface definition.
+您还可以创建类定义的特化。 当您创建类定义专门化时，您正在使用现有类定义作为模板或起点来创建新的类定义。 通过使用先前的类定义作为模板，用作起点的类定义中的所有接口都将复制到新的类定义中。 新的类定义还具有附加到这些接口定义的所有方法和属性。
 
-Specializations of class definitions
+创建类定义专门化时，将创建一个与类定义同名且前面带有 I 前缀的接口，并使用“实现”关系将其附加到新的类定义。 您在创建类定义时选择的任何属性定义都通过 Exposes 关系与新接口关联。
 
-You can also create a specialization of a class definition. When you create a class
- definition specialization, you are creating a new class definition using an existing
- class definition as a template or starting point. By using a prior class definition
- as the template, all interfaces from the class definition being used as the starting
- point are copied to the new class definition. The new class definition also has all
- the methods and properties attached to these interface definitions.
+#### 类定义类别
 
-When you create a class definition specialization, an interface with the same name
- as the class definition preceded by an I prefix is created and attached to the new class definition using the Realizes relationship.
- Any property definitions that you select when you create the class definition are
- associated to the new interface by an Exposes relationship.
+可以为每个类定义设置以下类别。
 
-#### Class definition properties
+| 类别                     | 描述 |
+| ------------------------ | ---- |
+| name                     |      |
+| description              |      |
+| displayName              |      |
+| isActivated              |      |
+| rev                      |      |
+| ver                      |      |
+| propertyValueType        |      |
+| propertyValueTypeDetails |      |
+| isMandatory              |      |
+| isDbField                |      |
+| HistoryRetained          |      |
+| fieldLength              |      |
+| exposedInterfaceDefUid   |      |
+| containerId              |      |
 
-The following properties can be set for each class definition.
+### 接口定义
 
-| Property    | Description                      |
-| ----------- | -------------------------------- |
-| DisplayName | The display name for the object. |
-| ...         | ...                              |
+接口定义是属性定义的命名集合。 每个接口定义都是由一个或多个类定义实现的。 接口定义公开了类定义的属性定义。 通过共享特定的接口定义，类定义也可以共享属性定义，但不能共享与属性关联的数据。
 
-##### Interface definitions
+**作为角色的接口定义**
 
-An interface definition is a named collection of property definitions. Every interface
- definition is realized by one or more class definitions. Interface definitions expose
- the property definitions for class definitions. By sharing specific interface definitions,
- class definitions can also share property definitions, but not the data associated
- with the properties.
+接口定义代表类定义的角色。 角色定义了对象的属性和关系。 一些接口定义被定义为携带属性，一些被定义为携带关系。 其他的可能仅仅被定义来指示角色。
 
-Interface definitions as roles
+不同的类定义可以共享相同的接口定义，因此具有相同的角色。 例如，模式中的每个类定义共享 IObject 接口，这意味着模式中的每个类定义都具有对象的角色。 当类定义具有此角色时，它具有对象名称、对象描述、对象标识符以及 IObject 接口公开的任何其他属性定义。
 
-An interface definition represents a role for a class definition. The role defines
- both the properties and relationships of an object. Some interface definitions are
- defined to carry properties, and some are defined to carry relationships. Others may
- be defined merely to indicate a role.
+然而，共享 IObject 接口的类定义也实现了为它们定义其他角色的其他接口定义。 这些接口定义公开了对象的其他属性定义。
 
-Different class definitions can share the same interface definitions and, therefore,
- the same role. For example, every class definition in the schema shares the IObject
- interface, which means that every class definition in the schema has the role of an
- object. When a class definition has this role, it has an object name, an object description,
- an object identifier, and any other property definitions exposed by the IObject interface.
+**IObject**
 
-However, class definitions that share the IObject interface also realize other interface
- definitions that define other roles for them. These interface definitions expose other
- property definitions for the objects.
+每个持久对象都必须由唯一标识符 (UID) 来标识，该标识符是该对象的 IObject 接口上的一个属性。
 
-IObject
+每个关系和关系定义都有一个属性 UID1（标识关系第 1 端的对象的 UID）和第二个属性 UID2（标识关系第 2 端的对象）。
 
-Every persistent object must be identified by a unique identifier (UID) which is a
- property on the IObject interface for that object.
+接口定义的描述包括其属性、方法和关系。 由于任何接口定义都是关系或关系定义的潜在终点，因此接口的扩展定义（包括该接口定义直接或间接暗示的接口定义）必须包括 IObject。 因此，每个接口定义都必须直接或间接隐含IObject。
 
-Every relationship and relationship definition has a property UID1 that identifies
- the UID of the object at end 1 of the relationship and a second property UID2 that
- identifies the object at end 2 of the relationship.
+对于每个不直接或间接隐含 IObject 的接口定义，验证期间都会报告错误。
 
-The description of an interface definition includes its properties, methods and relationships.
- Since any interface definition is a potential end for a relationship or relationship
- definition, the extended definition of an interface, which includes the interface
- definitions directly or indirectly implied by that interface definition, must include
- IObject. Therefore, every interface definition must directly or indirectly imply IObject.
+**接口定义和关系**
 
-For every interface definition that doesn't directly or indirectly imply IObject,
- an error will be reported during validation.
+接口定义定义了对象参与的关系。 类定义之间没有关系，只有接口定义之间没有关系。 这是因为只有接口定义暴露给外界。 对类定义和接口定义而不是类定义和关系进行建模的根本原因是因为可以形成的关系的复杂性。
 
-Interface definitions and relationships
+在传统的类数据模型中，关系直接从一个类定义到另一个类定义。 然而，当类层次结构变得相当深时，这些关系就变得很难理解。 结果是建模者将关系在层次结构中向上移动，这导致在定义关系所代表的内容时产生歧义。 通过将相似的特征分组在一起并将它们公开为称为接口定义的抽象实体，可以更轻松地保持关系的精确性。
 
-Interface definitions define the relationships in which an object participates. There
- are no relationships between class definitions, only between interface definitions.
- That is because only the interface definitions are exposed to the outside world. The
- underlying reason for modeling class definitions and interface definitions instead
- of class definitions and relationships is because of the complexity of the relationships
- that can be formed.
+类定义和接口定义之间定义了两种关系：
 
-In a traditional class data model, relationships go directly from one class definition
- to another. When the class hierarchy gets moderately deep, however, the relationships
- become very hard to understand. The consequence is that the modeler moves the relationships
- up in the hierarchy, which causes ambiguity in defining just what the relationship
- represents. By grouping similar characteristics together and exposing them as an abstract
- entity called an interface definition, it is easier to maintain precision in the relationships.
+- 实现关系
 
-There are two relationships defined between class definitions and interface definitions:
+- 主要接口关系
 
-- Realizes relationship
+**实现关系**
 
-- Primary Interface relationship
+类定义和接口定义之间的第一个也是最常见的关系是实现关系。 类定义实现接口定义。 Realizes 关系可能是必需的，也可能是可选的。 如果需要，Schema Component将要求该类定义的实例实现所需接口定义的实例。
 
-Realizes relationship
+![SHARED Tip](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAANCAIAAAC7P9CBAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTExIDc5LjE1ODMyNSwgMjAxNS8wOS8xMC0wMToxMDoyMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkMmJjM2E2OS00YTUyLTdlNDgtODFkYS05ZDFhOTA0N2U3NTIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NDMwMUM5MDgyREM4MTFFNjk3NzY4MjA2NEMwMDc1NzciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NDMwMUM5MDcyREM4MTFFNjk3NzY4MjA2NEMwMDc1NzciIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ODdhMTM4MzYtMjc5MC03YTRiLThmODktODI2NTIxNjQ3N2M4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmQyYmMzYTY5LTRhNTItN2U0OC04MWRhLTlkMWE5MDQ3ZTc1MiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PoAZ1o0AAAEjSURBVHjaYvz//z/DAAEWOOvjL4bKswwzb4LY6eoM7cYM/GwoShmrj+Mx6H+rJVwNhI1Vy+xA5RQTMQibCUL9/c8gtIxh+g2Gf/9BCMgAcv/SIERS19/devM9ir93PgVZiQyAXKCglwy6z5A9hCyCBxxK1bZV4AMy7GdfPfTgk8+iGxCNUH/HHETXIMiGRZA8wMvODGEcTNUGWcnIgBLmmOD9L5qnNajdZ/wwEiETFkEKgUb/BUhsosS3Ei/DLGuGtKMwFzEyTLMECVIFGE65BGezszDtSdJCz2OpaiBEazDFV9FGnhfdbiBYepchGez1udYM0cpUs+98jp6BJDe+sgUIgPZR0Upi0xrc3xyLQAjIoGuZCgSWYgxJqlAGHQBAgAEAhy9Y5GqbRX4AAAAASUVORK5CYII=) 使用 Realizes 关系上的 IsRequired 标志来指定特定类定义的对象是否必须具有接口定义，或者接口定义是否是可选的。
 
-The first and most common relationship between class definitions and interface definitions
- is the Realizes relationship. A class definition Realizes an interface definition.
- The Realizes relationship may be required or optional. If it is required, the Schema
- Component will require that an instance of that class definition realize an instance
- of the required interface definition.
+**隐含关系**
 
-![SHARED Tip](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAANCAIAAAC7P9CBAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTExIDc5LjE1ODMyNSwgMjAxNS8wOS8xMC0wMToxMDoyMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkMmJjM2E2OS00YTUyLTdlNDgtODFkYS05ZDFhOTA0N2U3NTIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NDMwMUM5MDgyREM4MTFFNjk3NzY4MjA2NEMwMDc1NzciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NDMwMUM5MDcyREM4MTFFNjk3NzY4MjA2NEMwMDc1NzciIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ODdhMTM4MzYtMjc5MC03YTRiLThmODktODI2NTIxNjQ3N2M4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmQyYmMzYTY5LTRhNTItN2U0OC04MWRhLTlkMWE5MDQ3ZTc1MiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PoAZ1o0AAAEjSURBVHjaYvz//z/DAAEWOOvjL4bKswwzb4LY6eoM7cYM/GwoShmrj+Mx6H+rJVwNhI1Vy+xA5RQTMQibCUL9/c8gtIxh+g2Gf/9BCMgAcv/SIERS19/devM9ir93PgVZiQyAXKCglwy6z5A9hCyCBxxK1bZV4AMy7GdfPfTgk8+iGxCNUH/HHETXIMiGRZA8wMvODGEcTNUGWcnIgBLmmOD9L5qnNajdZ/wwEiETFkEKgUb/BUhsosS3Ei/DLGuGtKMwFzEyTLMECVIFGE65BGezszDtSdJCz2OpaiBEazDFV9FGnhfdbiBYepchGez1udYM0cpUs+98jp6BJDe+sgUIgPZR0Upi0xrc3xyLQAjIoGuZCgSWYgxJqlAGHQBAgAEAhy9Y5GqbRX4AAAAASUVORK5CYII=) Use the IsRequired flag on the Realizes relationship to specify if an object of the particular class
- definition must have the interface definition or if it is optional.
+对象的定义是通过接口定义之间的Implies关系来完成的。 当您考虑类定义实现的主要接口定义的隐含关系的完整层次结构时，您就了解集成环境中该对象的一切。
 
-Implies relationship
+如果一个接口定义隐含了另一个接口定义，那么任何实现第一个接口定义的类定义也可以实现隐含的接口定义。 例如，IFDWAsset 接口隐含 IFDWPhysicalItem 接口。 因此，任何实现 IFDWAsset 的类定义（例如 FDWAsset）也可以实现 IFDWPhysicalItem。 如果需要两个接口定义之间存在 Implies 关系，则实现第一个接口定义的所有类定义也必须实现第二个接口定义。
 
-The definition of an object is completed through Implies relationships between interface
- definitions. When you consider the complete hierarchy of Implies relationships for
- the primary interface definition that a class definition realizes, you know everything
- about that object in an integrated environment.
+**属性类别**
 
-If an interface definition implies another interface definition, then any class definition
- that realizes the first interface definition can also realize the implied interface
- definition. For example, IFDWAsset interface implies the IFDWPhysicalItem interface.
- Therefore, any class definition, such as FDWAsset, that realizes IFDWAsset can also
- realize IFDWPhysicalItem. If an Implies relationship between two interface definitions
- is required, then all class definitions that realize the first interface definition
- must also realize the second.
+属性类别有助于组织 SDx 属性窗口中的属性。 属性类别可以通过界面定义或边缘定义来定义。 如果没有为边定义定义属性定义，则会根据为公开属性的接口定义定义的属性类别，为跨边定义的属性分配一个属性类别。
 
-Properties categories
+**SDx 中的接口定义**
 
-The property category helps organize properties in the Properties window in SDx. Property categories can be defined by the interface definition or
- edge definition. If no property definition is defined for the edge definition, properties
- across the edge definition are assigned a property category based on the property
- category defined for the interface definition that exposes the properties.
+在 SDx 中，接口定义用于定义哪些方法可用以及哪些工作流程适合实现接口定义的对象。
 
-Interface definitions in SDx
+#### 接口定义类别
 
-In SDx, interface definitions are used to define which methods are available and which
- workflows are appropriate for objects that realize the interface definition. 
+可以为每个类定义设置以下类别。
 
-#### Interface definition properties
+| 类别                    | 描述 |
+| ----------------------- | ---- |
+| name                    |      |
+| description             |      |
+| displayName             |      |
+| isActivated             |      |
+| rev                     |      |
+| ver                     |      |
+| interfaceSequenceNumber |      |
+| containerId             |      |
 
-The following properties can be set for each interface definition.
-
-| Property | Description |
-| -------- | ----------- |
-| ...      | ...         |
-
-### Property definitions
+### 属性定义
 
 All property definitions for an object are exposed through its interface definitions
  and never directly by the object. The property definitions that apply to a particular
@@ -296,7 +227,7 @@ Basic varieties of property types in the schema include the following:
 
 - YMD - Specifies that the property value is a date (year, month, day).
 
-#### Enumerated lists
+#### 枚举列表
 
 In the schema, some property definitions are of the enumerated list type (EnumListType).
  These property definitions have a list of possible string property values defined
@@ -336,7 +267,7 @@ Leaf nodes within an enumerated list hierarchy are instances of the EnumEnum cla
  list may or may not be an enumerated entry as well. For branch nodes within an enumerated
  list hierarchy, the EnumListType object will realize this optional interface.\
 
-### Relationship definitions
+### 关联定义
 
 Relationship definitions are associations between interface definitions. They identify
  two specific objects that fulfill the roles on each end of the relationship.
@@ -363,7 +294,7 @@ For example, if you create a relationship between a company and employee, you co
  use the IEmployee interface to expose link attributes (properties) like employee number,
  salary, office number, and e-mail address on the relationship.
 
-#### Relationship properties
+#### 关联属性
 
 There are many different aspects to the behavior of a relationship definition. Where
  these can all be separately configured, there are many soft dependencies between them. This section describes the following aspects of relationship
