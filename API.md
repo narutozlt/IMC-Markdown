@@ -16,11 +16,19 @@
 4. **报表引擎**
 5. **QMS质量管理引擎**
 
-## Schema介绍（英文供参考）
+## Schema介绍
 
 1.schema概念介绍（面向对象，类型，接口，属性，关联关系，枚举），最好一个类型举个简单例子和图
 
-## Schema Concepts
+2.schema 配置介绍，举一个列子（比如站点-工厂-区域-单元），讲明其中的类型，接口，属性定义并配图
+
+3.Excel配置schema介绍，导出成xml并导入到imc介绍
+
+4.Schema操作代码示例
+
+
+
+### schema概念介绍
 
 数据模型是定义可以在数据库中存储哪些信息以及对象之间可以具有哪些关系的结构。 例如，数据模型定义了哪些属性可以定义标签。 它还描述了文档与其他对象（例如工厂或项目、合同或组织）之间的关系。
 
@@ -28,185 +36,96 @@ schema由许多组件组成，这些组件一起工作来定义您的数据，
  包括：
 
 - **类定义** - 对一组扮演类似角色并共享一些相同属性和关系的对象的命名描述。
-   
+
   例如，作为组织实例的对象可以扮演以下角色中的一个或多个：内部组织、外部组织、供应商、制造商或承包商。
-  
+
 - **接口定义** - 对象可用的属性集合，作为一个集合，代表对象所扮演的角色。 接口定义也代表关系定义的结束。
-   
-   每个角色都由不同的接口定义表示，该定义公开属性并支持特定于该角色的关系。
-  
-- **关联定义** - 对象如何相互关联的定义。
-  
+
+  每个角色都由不同的接口定义表示，该定义公开属性并支持特定于该角色的关系。
+
+- **关联关系定义** - 对象如何相互关联的定义。
+
   例如，关系定义描述了组织和合同之间可能存在的关系。 关系定义可以包括诸如每个合同可以与多少个组织相关以及删除合同时组织会发生什么等信息。
-  
+
 - **属性定义** - 描述对象的属性。 属性通过接口定义与类定义相关。
+
+- **枚举定义** - 描述了一系列枚举对象的属性
 
 ### 类定义
 
-类定义是一组对象的命名描述，这些对象支持或实现相同的接口定义并共享相同的属性定义和关系。 在模式中，类定义可以表示物理事物（例如泵）或概念事物（例如项目）。
+**类定义属性**
 
-类定义具有以下特点：
-
-- 每个类定义都属于一个且仅一个组件模式。
-
-- 每个类定义都有一个主要接口定义，它定义了类定义的一组可能的角色（接口定义）。
-   
-- 类定义的每个实例都由factory类实例化。
+| 属性               | 描述                   |
+| ------------------ | ---------------------- |
+| name               | 类的名称               |
+| description        | 类的描述               |
+| displayName        | 展示名称               |
+| isConfigControlled | 表示该类是否受配置控制 |
+| uidPattern         |                        |
+| rev                |                        |
+| ver                |                        |
+| containerId        | 所属的container        |
+| tableName          | 表名                   |
+| cachedInfo         | 缓存信息               |
+| isActivated        |                        |
 
 **类定义和接口定义**
 
 类定义提供了软件可以与之交互的不同角色。 类定义通过称为接口定义的抽象实体来公开或实现其角色。
 
-类定义与接口定义具有实现关系。 这意味着特定类定义的实例支持或实现已实现的接口定义。
+类定义与接口定义具有实现关系，即存在Realizes关系。 这意味着特定类定义的实例支持或实现那些已实现的接口定义。
 
-![SHARED Tip](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAANCAIAAAC7P9CBAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTExIDc5LjE1ODMyNSwgMjAxNS8wOS8xMC0wMToxMDoyMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkMmJjM2E2OS00YTUyLTdlNDgtODFkYS05ZDFhOTA0N2U3NTIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NDMwMUM5MDgyREM4MTFFNjk3NzY4MjA2NEMwMDc1NzciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NDMwMUM5MDcyREM4MTFFNjk3NzY4MjA2NEMwMDc1NzciIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ODdhMTM4MzYtMjc5MC03YTRiLThmODktODI2NTIxNjQ3N2M4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmQyYmMzYTY5LTRhNTItN2U0OC04MWRhLTlkMWE5MDQ3ZTc1MiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PoAZ1o0AAAEjSURBVHjaYvz//z/DAAEWOOvjL4bKswwzb4LY6eoM7cYM/GwoShmrj+Mx6H+rJVwNhI1Vy+xA5RQTMQibCUL9/c8gtIxh+g2Gf/9BCMgAcv/SIERS19/devM9ir93PgVZiQyAXKCglwy6z5A9hCyCBxxK1bZV4AMy7GdfPfTgk8+iGxCNUH/HHETXIMiGRZA8wMvODGEcTNUGWcnIgBLmmOD9L5qnNajdZ/wwEiETFkEKgUb/BUhsosS3Ei/DLGuGtKMwFzEyTLMECVIFGE65BGezszDtSdJCz2OpaiBEazDFV9FGnhfdbiBYepchGez1udYM0cpUs+98jp6BJDe+sgUIgPZR0Upi0xrc3xyLQAjIoGuZCgSWYgxJqlAGHQBAgAEAhy9Y5GqbRX4AAAAASUVORK5CYII=) 使用 Realizes 关系上的 IsRequired 标志来指定特定类定义的对象是否必须具有接口定义，或者是可选的。
+![SHARED Tip](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAANCAIAAAC7P9CBAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTExIDc5LjE1ODMyNSwgMjAxNS8wOS8xMC0wMToxMDoyMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkMmJjM2E2OS00YTUyLTdlNDgtODFkYS05ZDFhOTA0N2U3NTIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NDMwMUM5MDgyREM4MTFFNjk3NzY4MjA2NEMwMDc1NzciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NDMwMUM5MDcyREM4MTFFNjk3NzY4MjA2NEMwMDc1NzciIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ODdhMTM4MzYtMjc5MC03YTRiLThmODktODI2NTIxNjQ3N2M4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmQyYmMzYTY5LTRhNTItN2U0OC04MWRhLTlkMWE5MDQ3ZTc1MiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PoAZ1o0AAAEjSURBVHjaYvz//z/DAAEWOOvjL4bKswwzb4LY6eoM7cYM/GwoShmrj+Mx6H+rJVwNhI1Vy+xA5RQTMQibCUL9/c8gtIxh+g2Gf/9BCMgAcv/SIERS19/devM9ir93PgVZiQyAXKCglwy6z5A9hCyCBxxK1bZV4AMy7GdfPfTgk8+iGxCNUH/HHETXIMiGRZA8wMvODGEcTNUGWcnIgBLmmOD9L5qnNajdZ/wwEiETFkEKgUb/BUhsosS3Ei/DLGuGtKMwFzEyTLMECVIFGE65BGezszDtSdJCz2OpaiBEazDFV9FGnhfdbiBYepchGez1udYM0cpUs+98jp6BJDe+sgUIgPZR0Upi0xrc3xyLQAjIoGuZCgSWYgxJqlAGHQBAgAEAhy9Y5GqbRX4AAAAASUVORK5CYII=) 使用 Rel关系上的 IsRequired 标志来指定特定类定义的对象的接口定义是必须的或者是可选的。
 
-类定义还必须实现隐式接口定义。 如果一个接口定义隐含另一个接口定义，则任何实现第一个接口定义的类定义也必须实现隐含的接口定义。
+![](./img/class_realize_interface.png)
 
-**类定义和属性定义**
+如图，类CIMWorkflow实现了5个基本接口，分别是IObject、IObjectEx、ICIMConditionComposition、ICIMWorkflow、ICIMWorkflowObject
 
-类定义由属性定义组成，可以共享属性定义，但不能共享与属性关联的数据。 接口定义通过将属性定义组合在称为接口定义的命名集合中来公开类定义的属性定义。
 
-类定义的特化
-
-您还可以创建类定义的特化。 当您创建类定义专门化时，您正在使用现有类定义作为模板或起点来创建新的类定义。 通过使用先前的类定义作为模板，用作起点的类定义中的所有接口都将复制到新的类定义中。 新的类定义还具有附加到这些接口定义的所有方法和属性。
-
-创建类定义专门化时，将创建一个与类定义同名且前面带有 I 前缀的接口，并使用“实现”关系将其附加到新的类定义。 您在创建类定义时选择的任何属性定义都通过 Exposes 关系与新接口关联。
-
-#### 类定义属性
-
-可以为每个类定义设置以下属性。
-
-| 属性                     | 描述 |
-| ------------------------ | ---- |
-| name                     |      |
-| description              |      |
-| displayName              |      |
-| isActivated              |      |
-| rev                      |      |
-| ver                      |      |
-| propertyValueType        |      |
-| propertyValueTypeDetails |      |
-| isMandatory              |      |
-| isDbField                |      |
-| HistoryRetained          |      |
-| fieldLength              |      |
-| exposedInterfaceDefUid   |      |
-| containerId              |      |
 
 ### 接口定义
 
-接口定义是属性定义的命名集合。 每个接口定义都是由一个或多个类定义实现的。 接口定义公开了类定义的属性定义。 通过共享特定的接口定义，类定义也可以共享属性定义，但不能共享与属性关联的数据。
+**接口定义属性**
+
+| 属性                    | 描述            |
+| ----------------------- | --------------- |
+| name                    | 接口名称        |
+| description             | 接口描述        |
+| displayName             | 展示名称        |
+| isActivated             |                 |
+| rev                     |                 |
+| ver                     |                 |
+| interfaceSequenceNumber | 接口序列号      |
+| containerId             | 所属的container |
 
 **作为角色的接口定义**
 
-接口定义代表类定义的角色。 角色定义了对象的属性和关系。 一些接口定义被定义为携带属性，一些被定义为携带关系。 其他的可能仅仅被定义来指示角色。
+接口定义代表了类定义的角色。 角色定义了对象的属性和关系。 一些接口被定义为携带属性，一些被定义为携带关联关系， 其他的可能仅仅被定义为指示角色。
 
-不同的类定义可以共享相同的接口定义，因此具有相同的角色。 例如，模式中的每个类定义共享 IObject 接口，这意味着模式中的每个类定义都具有对象的角色。 当类定义具有此角色时，它具有对象名称、对象描述、对象标识符以及 IObject 接口公开的任何其他属性定义。
+不同的类定义可以共享相同的接口定义，因此具有相同的角色。 例如：CIMWorkflow和CIMWorkflowTemplate共享IObject接口，这意味着CIMWorkflow和CIMWorkflowTemplate都具有object的角色，它们都具有object name、object description、object identifier以及 IObject 接口公开的任何其他属性定义。
 
-然而，共享 IObject 接口的类定义也实现了为它们定义其他角色的其他接口定义。 这些接口定义公开了对象的其他属性定义。
+**继承关系**
 
-**IObject**
+如果一个接口定义继承了另一个接口定义，即两个接口定义之间存在 Implies 关系，那么任何实现第一个接口定义的类定义也可以实现被继承的接口定义。
 
-每个持久对象都必须由唯一标识符 (UID) 来标识，该标识符是该对象的 IObject 接口上的一个属性。
+![](img/interface_inheritance.png)
 
-每个关系和关系定义都有一个属性 UID1（标识关系第 1 端的对象的 UID）和第二个属性 UID2（标识关系第 2 端的对象）。
-
-接口定义的描述包括其属性、方法和关系。 由于任何接口定义都是关系或关系定义的潜在终点，因此接口的扩展定义（包括该接口定义直接或间接暗示的接口定义）必须包括 IObject。 因此，每个接口定义都必须直接或间接隐含IObject。
-
-对于每个不直接或间接隐含 IObject 的接口定义，验证期间都会报告错误。
-
-**接口定义和关系**
-
-接口定义定义了对象参与的关系。 类定义之间没有关系，只有接口定义之间没有关系。 这是因为只有接口定义暴露给外界。 对类定义和接口定义而不是类定义和关系进行建模的根本原因是因为可以形成的关系的复杂性。
-
-在传统的类数据模型中，关系直接从一个类定义到另一个类定义。 然而，当类层次结构变得相当深时，这些关系就变得很难理解。 结果是建模者将关系在层次结构中向上移动，这导致在定义关系所代表的内容时产生歧义。 通过将相似的特征分组在一起并将它们公开为称为接口定义的抽象实体，可以更轻松地保持关系的精确性。
-
-类定义和接口定义之间定义了两种关系：
-
-- 实现关系
-
-- 主要接口关系
-
-**实现关系**
-
-类定义和接口定义之间的第一个也是最常见的关系是实现关系。 类定义实现接口定义。 Realizes 关系可能是必需的，也可能是可选的。 如果需要，Schema Component将要求该类定义的实例实现所需接口定义的实例。
-
-![SHARED Tip](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAANCAIAAAC7P9CBAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTExIDc5LjE1ODMyNSwgMjAxNS8wOS8xMC0wMToxMDoyMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkMmJjM2E2OS00YTUyLTdlNDgtODFkYS05ZDFhOTA0N2U3NTIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NDMwMUM5MDgyREM4MTFFNjk3NzY4MjA2NEMwMDc1NzciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NDMwMUM5MDcyREM4MTFFNjk3NzY4MjA2NEMwMDc1NzciIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ODdhMTM4MzYtMjc5MC03YTRiLThmODktODI2NTIxNjQ3N2M4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmQyYmMzYTY5LTRhNTItN2U0OC04MWRhLTlkMWE5MDQ3ZTc1MiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PoAZ1o0AAAEjSURBVHjaYvz//z/DAAEWOOvjL4bKswwzb4LY6eoM7cYM/GwoShmrj+Mx6H+rJVwNhI1Vy+xA5RQTMQibCUL9/c8gtIxh+g2Gf/9BCMgAcv/SIERS19/devM9ir93PgVZiQyAXKCglwy6z5A9hCyCBxxK1bZV4AMy7GdfPfTgk8+iGxCNUH/HHETXIMiGRZA8wMvODGEcTNUGWcnIgBLmmOD9L5qnNajdZ/wwEiETFkEKgUb/BUhsosS3Ei/DLGuGtKMwFzEyTLMECVIFGE65BGezszDtSdJCz2OpaiBEazDFV9FGnhfdbiBYepchGez1udYM0cpUs+98jp6BJDe+sgUIgPZR0Upi0xrc3xyLQAjIoGuZCgSWYgxJqlAGHQBAgAEAhy9Y5GqbRX4AAAAASUVORK5CYII=) 使用 Realizes 关系上的 IsRequired 标志来指定特定类定义的对象是否必须具有接口定义，或者接口定义是否是可选的。
-
-**隐含关系**
-
-对象的定义是通过接口定义之间的Implies关系来完成的。 当您考虑类定义实现的主要接口定义的隐含关系的完整层次结构时，您就了解集成环境中该对象的一切。
-
-如果一个接口定义隐含了另一个接口定义，那么任何实现第一个接口定义的类定义也可以实现隐含的接口定义。 例如，IFDWAsset 接口隐含 IFDWPhysicalItem 接口。 因此，任何实现 IFDWAsset 的类定义（例如 FDWAsset）也可以实现 IFDWPhysicalItem。 如果需要两个接口定义之间存在 Implies 关系，则实现第一个接口定义的所有类定义也必须实现第二个接口定义。
-
-**属性类别**
-
-属性类别有助于组织 SDx 属性窗口中的属性。 属性类别可以通过界面定义或边缘定义来定义。 如果没有为边定义定义属性定义，则会根据为公开属性的接口定义定义的属性类别，为跨边定义的属性分配一个属性类别。
-
-**SDx 中的接口定义**
-
-在 SDx 中，接口定义用于定义哪些方法可用以及哪些工作流程适合实现接口定义的对象。
-
-#### 接口定义属性
-
-可以为每个类定义设置以下属性。
-
-| 属性                    | 描述 |
-| ----------------------- | ---- |
-| name                    |      |
-| description             |      |
-| displayName             |      |
-| isActivated             |      |
-| rev                     |      |
-| ver                     |      |
-| interfaceSequenceNumber |      |
-| containerId             |      |
+如图，ICIMWorkflow继承了IObject，ICIMWorkflowObject和ICIMWorkflowTemplate继承了ICIMWorkflow。 因此，任何实现 ICIMWorkflowObject和ICIMWorkflowTemplate的类定义（例如 CIMWorkflowTemplate）也可以实现IObject和ICIMWorkflow。 
 
 ### 属性定义
 
 对象的所有属性定义都是通过其接口定义公开的，而不是直接由对象公开。 应用于特定接口定义的属性定义是由模式中 InterfaceDef 类型的对象和 PropertyDef 类型的对象之间的 Expose 关系定义的。 给定类定义的特定属性定义通常由一个且仅一个接口定义公开。
 
-![SHARED Tip](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAANCAIAAAC7P9CBAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTExIDc5LjE1ODMyNSwgMjAxNS8wOS8xMC0wMToxMDoyMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkMmJjM2E2OS00YTUyLTdlNDgtODFkYS05ZDFhOTA0N2U3NTIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NDMwMUM5MDgyREM4MTFFNjk3NzY4MjA2NEMwMDc1NzciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NDMwMUM5MDcyREM4MTFFNjk3NzY4MjA2NEMwMDc1NzciIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ODdhMTM4MzYtMjc5MC03YTRiLThmODktODI2NTIxNjQ3N2M4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmQyYmMzYTY5LTRhNTItN2U0OC04MWRhLTlkMWE5MDQ3ZTc1MiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PoAZ1o0AAAEjSURBVHjaYvz//z/DAAEWOOvjL4bKswwzb4LY6eoM7cYM/GwoShmrj+Mx6H+rJVwNhI1Vy+xA5RQTMQibCUL9/c8gtIxh+g2Gf/9BCMgAcv/SIERS19/devM9ir93PgVZiQyAXKCglwy6z5A9hCyCBxxK1bZV4AMy7GdfPfTgk8+iGxCNUH/HHETXIMiGRZA8wMvODGEcTNUGWcnIgBLmmOD9L5qnNajdZ/wwEiETFkEKgUb/BUhsosS3Ei/DLGuGtKMwFzEyTLMECVIFGE65BGezszDtSdJCz2OpaiBEazDFV9FGnhfdbiBYepchGez1udYM0cpUs+98jp6BJDe+sgUIgPZR0Upi0xrc3xyLQAjIoGuZCgSWYgxJqlAGHQBAgAEAhy9Y5GqbRX4AAAAASUVORK5CYII=) 使用 Exposes 关系上的 IsRequired 标志来指定当对象实例化接口定义时该属性是否是强制的。
+![](./img/property.png)
 
-例如，IObject接口定义公开了几个属性定义
- 包括：
+如上图所示，ICIMWorkflowStepLegend接口定义公开了几个属性定义，包括：
 
-- UID - 对象的唯一标识符。 该标识符仅需要在schema中是唯一的。
-   
-- Name - 对象的名称
+- WorkflowStepLegendTextColor - 步骤图例的文字颜色
+- WorkflowStepLegendIcon - 步骤图例的图标
+- WorkflowStepLegendTitle - 步骤图例的标题
+- WorkflowStepLegendBackgroundColor - 步骤图例的背景色
 
-- Description - 对象的描述
-
-架构中的所有对象都具有这些属性，因为所有类定义都实现了 IObject 接口定义。
-
-属性类型
-
-属性类型定义属性定义的一组可能值。 按关系定义范围指定定义可接受值或范围、特定属性定义的属性类型。 每个属性定义的范围仅限于一种属性类型。 该属性定义的所有属性都必须属于该属性类型。
-
-![SHARED Tip](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAANCAIAAAC7P9CBAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTExIDc5LjE1ODMyNSwgMjAxNS8wOS8xMC0wMToxMDoyMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkMmJjM2E2OS00YTUyLTdlNDgtODFkYS05ZDFhOTA0N2U3NTIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NDMwMUM5MDgyREM4MTFFNjk3NzY4MjA2NEMwMDc1NzciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NDMwMUM5MDcyREM4MTFFNjk3NzY4MjA2NEMwMDc1NzciIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6ODdhMTM4MzYtMjc5MC03YTRiLThmODktODI2NTIxNjQ3N2M4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOmQyYmMzYTY5LTRhNTItN2U0OC04MWRhLTlkMWE5MDQ3ZTc1MiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PoAZ1o0AAAEjSURBVHjaYvz//z/DAAEWOOvjL4bKswwzb4LY6eoM7cYM/GwoShmrj+Mx6H+rJVwNhI1Vy+xA5RQTMQibCUL9/c8gtIxh+g2Gf/9BCMgAcv/SIERS19/devM9ir93PgVZiQyAXKCglwy6z5A9hCyCBxxK1bZV4AMy7GdfPfTgk8+iGxCNUH/HHETXIMiGRZA8wMvODGEcTNUGWcnIgBLmmOD9L5qnNajdZ/wwEiETFkEKgUb/BUhsosS3Ei/DLGuGtKMwFzEyTLMECVIFGE65BGezszDtSdJCz2OpaiBEazDFV9FGnhfdbiBYepchGez1udYM0cpUs+98jp6BJDe+sgUIgPZR0Upi0xrc3xyLQAjIoGuZCgSWYgxJqlAGHQBAgAEAhy9Y5GqbRX4AAAAASUVORK5CYII=)使用 Scoped by 关系上的 IsRequired 标志来指定属性是否必须具有数值。
-
-每个属性类型实际上是元架构中实现 IPropertyType 的类定义，这使其成为属性定义的作用域属性类型。
-
-架构中属性类型的基本种类包括以下内容：
-
-- Boolean - 指定属性只能具有两个值之一：True 或 False。
-
-- Double - 指定属性是双精度浮点数。
-
-- EnumListLevelType - 指定属性定义是一种特殊的属性类型，用于描述枚举层次结构中给定级别的所有枚举。
-   
-- EnumListType - 指定属性值由枚举列表定义。 有关枚举列表类型的更多信息，请参阅 [Enumerated lists](https://docs.hexagonppm.com/r/XZO2nmTFhH4Uhso6VtpAiw/pvH0jTyYUfo2UT4TQj2MSg).
-   
-- Int - 指定该属性的属性值是整数。
-
-- String - 指定属性的值可以包含带有某些标点符号的字母数字字符串，例如句点 (.)、下划线 (_)、问号 (?) 等。
-   
-  ![](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADkAAAANCAYAAAAT88Y+AAADCUlEQVRIid2WS0iUURTHf984NmhpajkalakljEkUY+Rj0SIqg5Iem9BN9nARGkrRKloIDVSLyiyiF1REtapFSfYSCRwzSe1hLbQYQ/tmnMZ0nBEdH1+Lj/mmT+ehkxD0h7s5/3POvf97DudeQZIkif8c2r8JFk40AbAxNZaGQ1kIgo+rrLVQbRbRaTWMVOUo9tutdi42iXywDiMBa5KiKctN5mC2Xon35g0FyZQX0lcy5ckiF92D/tHgCRN04Cj2z722OLn/4SfFaxcHzVHxxMLFJlFlaxfdlD76SkuPi6u70oMfIkxoIbTAmfgcr+um0BBPjC7CL/+ia1ARWGJM5NSWFASgqr6Hay02rrXY2GGIp9AQj2TKU8V6qzXV/ieCcUq7ntsARX4ustsNuY8Dxiv44fRwqqGHMwUr/PJXmq0ALF84j+u7V6LVyL15ZWc69d8G6XKMcPmNlUJDfOjNZglF5NG38goHWfpoOvqGOd8ost+ox5AYpXCj45MAmL8PAbA1I04RCKARYFtGHJccVhq7h8I7QAgoIssywZQ93cE9DsseQLARfGC9nnvv7bzrdVNRa+FZSabC6bQaAGyuMQCWxs6bFr8kRra5PBPhaAD8DytvCysiL3+RlxeRGjiyGqIiYG8avBSn5VCgEaBmRxr5Vz/xvHOAhx39AX3/xYOliKzOgX0ZPuLsRzAZYUKCogao3xY8UV5KDCXGRG612jn21MLOzAQVn7QgEptrjB6nZ1qsOCTboiM1YQsJNniUrBXNEHfXtwR8Ak+ugzUzmAenC1YQq4vA8muUarO69PkpMQA87xzAM+Er56QEdZ0DKp+5RsCr63LOTiDI1aravNwvdzgnGYBep4fSR1+xucZwDI9T/vgbXY4Rlc9cQwvyQz/1HXwlyi06U4FelOcmc6Olj46+YZV9y6qFVOYv4YJZ5E6bnTttdhW/z5jInix1i88GgX4+yo8n0E8mHGg1AjWFqWy6+RmAiUlfa57fnkr20vlUm620i24kIEsfRVluMqXrk+buEFPwG8xTDCy7ZDu9AAAAAElFTkSuQmCC)在字符串类型的属性中输入时，逗号会自动替换为分号。
-  
-- UoMListType -指定属性的值可以是数值（双精度）与相应度量单位列表中的度量单位以及一些可选条件的组合。 有关测量单位列表类型的更多信息，请参阅 [Units of measurement](https://docs.hexagonppm.com/r/XZO2nmTFhH4Uhso6VtpAiw/xa4x5AccAA79SjCIboNbLg).
-   
-- YMD - 指定属性值为日期 (year, month, day).
+通过且仅能通过ICIMWorkflowStepLegend接口来配置这些属性
 
 #### 枚举列表
 
@@ -214,103 +133,40 @@ schema由许多组件组成，这些组件一起工作来定义您的数据，
 
 每个枚举列表包含一个或多个枚举条目（EnumEnum）。 每个枚举条目代表该枚举列表范围内的属性的可能值。
 
-**枚举层次结构**
+![](./img/enumlist.png)
 
-枚举列表可以包含属性定义的所有可能的枚举条目，也可以将它们组合起来形成枚举层次结构。 当您以这种方式组合枚举列表时，您将创建由其他枚举列表引用的子枚举列表。 在这种情况下，可以使用特殊的属性类型（枚举列表级别类型）来描述枚举层次结构中给定级别的所有枚举。 当属性定义具有关联的枚举列表级别类型时，它可以有效地允许定义依赖选项列表。
-
-层次结构中属于 EnumListType 的所有节点都是其上方 EnumListType 的枚举条目。 所有 EnumListType 必须包含 EnumEnum（列表条目）或其他 EnumListType（枚举列表）。
-
-EnumListType 类定义用于枚举列表属性类型。 EnumListType 实现了 IPropertyType。 EnumListType 还实现了 IEnumListType，这是支持枚举列表行为的接口定义。 IEnumListType 具有与 IEnumEnum 的 Contains 关系定义。 该关系的实例用于指示枚举列表中包含的枚举条目。
-
-枚举列表层次结构中的叶节点是 EnumEnum 类定义的实例。 该类定义实现了 IEnumEnum（支持枚举条目行为的接口定义）和 IObject（包含枚举条目的短（名称）和长（描述）文本值的接口）。 枚举列表层次结构中的分支节点是 EnumListType 类的实例。 EnumListType 具有与 IEnumEnum 的可选实现关系，这意味着枚举列表也可能是也可能不是枚举条目。 对于枚举列表层次结构中的分支节点，EnumListType 对象将实现此可选接口。
+如上图所示，WorkflowStatus有4个枚举值，分别为Working、Processed、Completed、Error
 
 ### 关联定义
 
-关联定义是接口定义之间的关联。 他们确定两个特定的对象来履行关系两端的角色。
+**关联定义属性**
 
-模式中的所有关系定义都属于类 RelDef，它是元模式的一部分。 关系定义有两个端点：End1 和 End2。 引导这种关系的正方向是从 End1 到 End2。 相反的方向是从 End2 到 End1。 关系只能存在于支持（实现）关系定义两端的接口定义的对象之间。
+| 属性                                | 描述                                                         |
+| ----------------------------------- | ------------------------------------------------------------ |
+| name                                | 关联名称                                                     |
+| description                         | 关联描述                                                     |
+| displayName                         | 展示名称                                                     |
+| isActivated                         |                                                              |
+| tableName                           | 表名                                                         |
+| cachedInfo                          | 缓存信息                                                     |
+| interfaceDefUid1 & interfaceDefUid2 | 关联接口的uid                                                |
+| min1 & min2                         | 这两个属性决定是否需要关系。 值 0 表示关系是可选的，而值 1 表示关系是必需的。<br>配置为 Min1=1 和 Min2=0 意味着则末端 2 处的对象不能脱离于该关联关系存在，因为它必须对应末端 1 处的至少一个对象。 |
+| max1 & max2                         | 这两个属性用于标识可以参与关系每一端的对象的最大数量。 最常见的值为 1 或 *。<br>Max2=1的关系意味着1端的对象只能与2端的单个对象相关。<br>Max1=1的关系意味着2端的对象只能与1端的一个对象相关。 |
+| displayName1 & displayName2         | 展示名                                                       |
+| optionalInterfaces                  |                                                              |
+| rev                                 |                                                              |
+| ver                                 |                                                              |
+| delete1To2 & delete2To1             | 这两个属性用于控制删除关系两端的对象时发生的情况。删除一端对象时，与该对象的所有关联对象也将被删除<br>将Delete12设置为True表示当删除1端的对象时，2端的对象也必须被删除。 |
 
-关系定义还定义关系两端的基数。 基数通过定义关系两端参与者的最小和最大数量来提供关系的约束。 例如，在 FDWAssetLocation 关系中，将Asset与Location进行了一个多对一的关联(0..*)--(0..1)
+关联定义表示了两个接口之间的关联关系
 
-**关系上的链接属性**
+ ![](./img/rel.png)
 
-关系还可以具有链接属性或属性。 链接属性是通过在创建关系定义时将链接接口与关系定义相关联来定义的。 由于接口公开属性，因此您可以使用接口来定义关系定义所需的属性。
+如上图，在 WorkflowTemplateNotificationType 关联关系中，将ICIMWorkflowTemplate与ICIMWorkflowNotificationType进行了一个多对一的关联(0..*)--(0..1)，即让一个工作流模板对应一个工作流提醒类型、一个工作流提醒类型可对应多个工作流模板。
 
-例如，如果您在公司和员工之间创建关系，则可以使用 IEmployee 接口来公开该关系中的链接属性（属性），比如员工编号、工资、办公室号码和电子邮件地址。
 
-#### 关联属性
 
-关系定义的行为有许多不同的方面。 这些都可以单独配置，但它们之间存在许多软依赖关系。 本节描述关系定义行为的以下方面：
 
-- Relationship cardinality，用于控制有多少对象可以相互关联。
-
-- Delete flags，用于控制当关联关系一端的对象被删除时另一端对象会发生什么情况。
-   
-- Copy flags，用于控制复制关联关系另一端的对象时对象发生的情况
-   
-- Relationship ownership，用于在相关对象之间建立继承关系。
-   
-- Force Null Config flag，该标志将关联关系标识为不依赖，并且会扩展到假定所有相关对象都是不依赖配置的。
-   
-- Claims，用于控制关系一端的对象被声明时所发生的情况。
-   
-- 代码编写支持。
-
-![](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADkAAAANCAYAAAAT88Y+AAADCUlEQVRIid2WS0iUURTHf984NmhpajkalakljEkUY+Rj0SIqg5Iem9BN9nARGkrRKloIDVSLyiyiF1REtapFSfYSCRwzSe1hLbQYQ/tmnMZ0nBEdH1+Lj/mmT+ehkxD0h7s5/3POvf97DudeQZIkif8c2r8JFk40AbAxNZaGQ1kIgo+rrLVQbRbRaTWMVOUo9tutdi42iXywDiMBa5KiKctN5mC2Xon35g0FyZQX0lcy5ckiF92D/tHgCRN04Cj2z722OLn/4SfFaxcHzVHxxMLFJlFlaxfdlD76SkuPi6u70oMfIkxoIbTAmfgcr+um0BBPjC7CL/+ia1ARWGJM5NSWFASgqr6Hay02rrXY2GGIp9AQj2TKU8V6qzXV/ieCcUq7ntsARX4ustsNuY8Dxiv44fRwqqGHMwUr/PJXmq0ALF84j+u7V6LVyL15ZWc69d8G6XKMcPmNlUJDfOjNZglF5NG38goHWfpoOvqGOd8ost+ox5AYpXCj45MAmL8PAbA1I04RCKARYFtGHJccVhq7h8I7QAgoIssywZQ93cE9DsseQLARfGC9nnvv7bzrdVNRa+FZSabC6bQaAGyuMQCWxs6bFr8kRra5PBPhaAD8DytvCysiL3+RlxeRGjiyGqIiYG8avBSn5VCgEaBmRxr5Vz/xvHOAhx39AX3/xYOliKzOgX0ZPuLsRzAZYUKCogao3xY8UV5KDCXGRG612jn21MLOzAQVn7QgEptrjB6nZ1qsOCTboiM1YQsJNniUrBXNEHfXtwR8Ak+ugzUzmAenC1YQq4vA8muUarO69PkpMQA87xzAM+Er56QEdZ0DKp+5RsCr63LOTiDI1aravNwvdzgnGYBep4fSR1+xucZwDI9T/vgbXY4Rlc9cQwvyQz/1HXwlyi06U4FelOcmc6Olj46+YZV9y6qFVOYv4YJZ5E6bnTttdhW/z5jInix1i88GgX4+yo8n0E8mHGg1AjWFqWy6+RmAiUlfa57fnkr20vlUm620i24kIEsfRVluMqXrk+buEFPwG8xTDCy7ZDu9AAAAAElFTkSuQmCC) 前四种行为通常是排列在顶层作为可选项与声明功能一起使用。
-
-可以设置以下属性来配置关系定义的行为。
-
-| Property                              | Description                                                  |
-| ------------------------------------- | ------------------------------------------------------------ |
-| Max1 and Max2                         | 这些属性标识了关联关系每一端可以参与的最大对象数。 For more information, see [Max1 and Max2](https://docs.hexagonppm.com/r/XZO2nmTFhH4Uhso6VtpAiw/k7TdIO_WF9Lq6v4ZjN8N4A). |
-| Min1 and Min2                         | 这些属性决定关联关系是否必要。 值 0 表示关系是可选的，而值 1 表示关系是必需的。 For more information, see [Min1 and Min2](https://docs.hexagonppm.com/r/XZO2nmTFhH4Uhso6VtpAiw/WfUdPPhuW6L60KWRDW11iQ). |
-| Delete12 and Delete21                 | 这些属性控制当关联关系任意一端的对象被删除时发生什么情况。 For more information, see [Delete12 and Delete21](https://docs.hexagonppm.com/r/XZO2nmTFhH4Uhso6VtpAiw/BA2bzPXJPa4NQ9ls7zq4sQ). |
-| Role1DisplayName and Role2DisplayName | The display name of the role is shown in the Actions menu.   |
-| UID1 and UID2                         | A unique identifier for the object at end1 and end2.         |
-
-##### Max1 and Max2
-
-These two properties are used to identify the maximum number of objects that can participate
- at each end of the relationship. The most common values are 1 or *.
-
-A relationship configured with Max2=1 means that the object at end 1 can only be related
- to a single object at end 2.
-
-A relationship configured with Max1=1 means that the object at end 2 can be related
- to only one object at end 1.
-
-##### Min1 and Min2
-
-These two properties determine if a relationship is required or not. A value of 0
- means that the relationship is optional, whereas a value of 1 means the relationship
- is required.
-
-A relationship configured with Min1=1 and Min2=0 means that the object at end 2 cannot
- exist without this relationship being present as it has to be related to at least
- one object at end 1.
-
-##### Delete12 and Delete21
-
-These two properties are used to control what happens when the object at each end
- of the relationship is deleted. When an object is deleted, all relationships to that
- object are also deleted. In some cases, it is necessary to delete the objects at the
- other end of the relationship. For example, the object at the other end of the relationship
- cannot exist without the object that is being deleted.
-
-Setting Delete12 to True indicates that when the object at end 1 is deleted, the objects
- at end 2 must also be deleted.
-
-As a general rule:
-
-When Min1>0, then Delete12 should be set to True.
-
-When Min2>0, then Delete21 should be set to True.
-
-2.schema 配置介绍，举一个列子（比如站点-工厂-区域-单元），讲明其中的类型，接口，属性定义并配图
-
-3.Excel配置schema介绍，导出成xml并导入到imc介绍
-
-4.Schema操作代码示例
 
 ## 基座引擎
 
