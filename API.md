@@ -166,9 +166,36 @@ schema由许多组件组成，这些组件一起工作来定义您的数据，
 
 
 
+## schema配置介绍
+
+
+
+## Excel操作schema介绍
+
+### 导出为xml
+
+![](./img/xml.png)
+
+在README界面点击箭头所指按钮，自动在文件根目录下生成包含xml文件的文件夹，文件目录结构如下：
+
+```
+|--SCHEMA_IMC_WF
+|  |--01_接口_CIM.xml
+|  |--02_枚举_CIM.xml
+|  |--03_属性_CIM.xml
+|  |--...
+|  |--19_流程分类_CIM.xml
+|  |--SCHEMA_IMC_WF_CIM.xmlldr
+|--SCHEMA_IMC_WF.xlsm
+```
+
+## Schema操作代码示例
+
 
 
 ## 基座引擎
+
+
 
 ## 工作流引擎
 
