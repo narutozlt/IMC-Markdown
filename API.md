@@ -6,6 +6,58 @@
 </p>
 
 
+## 目录
+
+
+* [概述](#1)
+* [Schema介绍](#2)
+
+  * [Schema概念介绍](#3)
+  * [Schema配置介绍](#4)
+
+    * [类定义](#5)
+    * [接口定义](#6)
+    * [属性定义](#7)
+
+      * [枚举列表](#8)
+
+    * [关联定义](#9)
+
+  * [Excel操作schema介绍](#10)
+
+    * [新增条目](#11)
+    * [导出为xml](#12)
+    * [导入到IMC](#13)
+
+  * [Schema操作代码示例](#14)
+
+* [工作流引擎](#15)
+
+  * [Schema](#16)
+  * [ServerAPI调用示例](#17)
+  * [ProcessStep的调用](#18)
+
+* [检索引擎](#19)
+
+  * [API调用实例](#20)
+
+* [报告&报表引擎](#21)
+
+  * [使用步骤简述](#22)
+
+    * [场景一：通用管理](#23)
+    * [场景二：指定报表](#24)
+
+  * [API调用示例](#25)
+  * [报表设计简述](#26)
+
+* [结论](#27)
+
+
+
+<a id = "1"></a>
+
+
 ## 概述
 
 在这份文档中，您将了解如何进行IMC软件的二次开发。IMC是一个软件继承平台，提供了多个引擎用于不同的功能扩展和自定义开发。本文档将重点介绍以下四个主要引擎：
@@ -15,7 +67,11 @@
 3. **检索引擎**
 4. **报告&报表引擎**
 
+<a id = "2"></a>
+
 ## Schema介绍
+
+<a id = "3"></a>
 
 ### schema概念介绍
 
@@ -40,7 +96,11 @@ schema由许多组件组成，这些组件一起工作来定义您的数据，
 
 - **枚举定义** - 描述了一系列枚举对象的属性
 
+<a id = "4"></a>
+
 ### schema配置介绍
+
+<a id = "5"></a>
 
 #### 类定义
 
@@ -72,7 +132,7 @@ schema由许多组件组成，这些组件一起工作来定义您的数据，
 
 如图，类CIMWorkflow实现了5个基本接口，分别是IObject、IObjectEx、ICIMConditionComposition、ICIMWorkflow、ICIMWorkflowObject
 
-
+<a id = "6"></a>
 
 #### 接口定义
 
@@ -103,6 +163,8 @@ schema由许多组件组成，这些组件一起工作来定义您的数据，
 
 如图，ICIMWorkflow继承了IObject，ICIMWorkflowObject和ICIMWorkflowTemplate继承了ICIMWorkflow。 因此，任何实现 ICIMWorkflowObject和ICIMWorkflowTemplate的类定义（例如 CIMWorkflowTemplate）也可以实现IObject和ICIMWorkflow。 
 
+<a id = "7"></a>
+
 #### 属性定义
 
 对象的所有属性定义都是通过其接口定义公开的，而不是直接由对象公开。 应用于特定接口定义的属性定义是由模式中 InterfaceDef 类型的对象和 PropertyDef 类型的对象之间的 Expose 关系定义的。 给定类定义的特定属性定义通常由一个且仅一个接口定义公开。
@@ -118,6 +180,8 @@ schema由许多组件组成，这些组件一起工作来定义您的数据，
 
 通过且仅能通过ICIMWorkflowStepLegend接口来配置这些属性
 
+<a id = "8"></a>
+
 ##### 枚举列表
 
 在schema中，某些属性定义是枚举列表类型（EnumListType）。 这些属性定义在枚举列表（有时称为“选择列表”或“查找”）中为其定义了可能的字符串属性值列表。 此类型的属性定义的任何值都必须与为该属性类型定义的枚举属性值列表中的条目匹配。
@@ -127,6 +191,8 @@ schema由许多组件组成，这些组件一起工作来定义您的数据，
 ![](./img/enumlist.png)
 
 如上图所示，WorkflowStatus有4个枚举值，分别为Working、Processed、Completed、Error
+
+<a id = "9"></a>
 
 #### 关联定义
 
@@ -155,19 +221,19 @@ schema由许多组件组成，这些组件一起工作来定义您的数据，
 
 如上图，在 WorkflowTemplateNotificationType 关联关系中，将ICIMWorkflowTemplate与ICIMWorkflowNotificationType进行了一个多对一的关联(0..*)--(0..1)，即让一个工作流模板对应一个工作流提醒类型、一个工作流提醒类型可对应多个工作流模板。
 
-
-
-
-
-
+<a id = "10"></a>
 
 ### Excel操作schema介绍
+
+<a id = "11"></a>
 
 #### 新增条目
 
 ![](./img/insert.png)
 
 在需要新增的地方右键，点击`Insert`插入空白行，填写属性对应值即可
+
+<a id = "12"></a>
 
 #### 导出为xml
 
@@ -186,17 +252,25 @@ schema由许多组件组成，这些组件一起工作来定义您的数据，
 |--SCHEMA_IMC_WF.xlsm
 ```
 
+<a id = "13"></a>
+
 #### 导入到IMC
 
 
+
+<a id = "14"></a>
 
 ### Schema操作代码示例
 
 
 
+<a id = "15"></a>
+
 ## 工作流引擎
 
 在这一部分，我们将介绍如何使用工作流引擎进行二次开发，并提供一些API调用示例和操作步骤。
+
+<a id = "16"></a>
 
 ### Schema
 
@@ -362,6 +436,8 @@ schema由许多组件组成，这些组件一起工作来定义您的数据，
 | WSS_SignOff | SignOff | 已签署         | 已签署         | CIM.WORKFLOW |
 | WSS_RJ      | RJ      | 驳回          | 驳回          | CIM.WORKFLOW |
 
+<a id = "17"></a>
+
 ### ServerAPI调用示例
 
 ```java
@@ -457,6 +533,8 @@ R<Object> execute = Context.Instance.getDynamicApiEngine().execute(handleDTO);�
   * 返回值：
     `null`
 
+<a id = "18"></a>
+
 ### ProcessStep的调用
 
 在这一部分，我们将指导您如何进行工作流引擎的ProcessStep二次开发操作，
@@ -539,9 +617,13 @@ public class Processhandler extends WorkflowProcessStepHandlerBase {
 }
 ```
 
+<a id = "19"></a>
+
 ## 检索引擎
 
 这一部分将介绍如何使用分析引擎进行二次开发，并提供一些API调用示例和操作步骤。
+
+<a id = "20"></a>
 
 ### API调用示例
 
@@ -669,11 +751,17 @@ public class DemoDetail {
 }
 ```
 
+<a id = "21"></a>
+
 ## 报告&报表引擎
 
 在这一部分，我们将介绍如何使用报表引擎进行二次开发，并提供一些API调用示例和操作步骤。
 
+<a id = "22"></a>
+
 ### 使用步骤简述
+
+<a id = "23"></a>
 
 #### 场景一：通用管理
 
@@ -690,6 +778,8 @@ public class DemoDetail {
    ```
 
 3. 至此运行项目，当点击报表按钮后，会跳转到统一报表列表页面，选择需要的报表输入参数即可生成。
+
+<a id = "24"></a>
 
 #### 场景二：指定报表
 
@@ -713,6 +803,8 @@ public class DemoDetail {
    ```
 
 4. 至此运行项目，当点击报表按钮后，会弹出参数输入框，提供预览和生成报表功能。
+
+<a id = "25"></a>
 
 ### API调用示例
 
@@ -769,6 +861,8 @@ public class DemoDetail {
   * 返回值：
     `文件流`
 
+<a id = "26"></a>
+
 ### 报表设计简述
 
 * 添加数据源
@@ -785,10 +879,10 @@ public class DemoDetail {
 
 * 选中单元格，在属性框中设置依赖，聚合，分组等操作。
 
-
+<a id = "27"></a>
 
 ## 结论
 
-本文档提供了IMC软件中工作流引擎、分析引擎、报表引擎和QMS质量管理引擎的二次开发示例和操作指南。通过按照文档中的步骤进行操作，您可以扩展和自定义IMC软件以满足特定的业务需求。
+本文档提供了IMC软件中工作流引擎、检索引擎和报告&报表引擎二次开发示例和操作指南。通过按照文档中的步骤进行操作，您可以扩展和自定义IMC软件以满足特定的业务需求。
 
 请注意，以上仅为一个大体框架示例，您可以根据具体的需求和文档内容进行调整和扩展。希望这可以帮助您开始编写IMC软件的Markdown文档！如有任何进一步的问题，请随时向我提问。
