@@ -11,24 +11,23 @@
 
 * [概述](#1)
 * [Schema介绍](#2)
-* [Schema概念介绍](#3)
+  * [Schema概念介绍](#3)
   * [Schema配置介绍](#4)
-  
-  * [类定义](#5)
+    * [类定义](#5)
     * [接口定义](#6)
     * [属性定义](#7)
-  
-    * [枚举列表](#8)
-  
-  * [关联定义](#9)
-  
-* [Excel操作schema介绍](#10)
-  
-  * [新增条目](#11)
+    
+      * [枚举列表](#8)
+    
+    * [关联定义](#9)
+    
+  * [Excel操作schema介绍](#10)
+
+    * [新增条目](#11)
     * [导出为xml](#12)
     * [导入到IMC](#13)
   
-* [Schema操作代码示例](#14)
+  * [Schema操作代码示例](#14)
 * [工作流引擎](#15)
 
   * [Schema](#16)
@@ -666,7 +665,7 @@ R<Object> execute = Context.Instance.getDynamicApiEngine().execute(handleDTO);�
 
 **步骤流转示意图：**
 
-![](./img/workflow.jpg)
+![](./img/workflow.png)
 
 **自定义Handler示例：**
 
