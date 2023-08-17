@@ -4,8 +4,9 @@
     <a href="http://imc.smartsolutions.com.cn/login"></a>
     <a href="http://imc.smartsolutions.com.cn/login"><img src="https://img.shields.io/badge/IMC-v3.5.0-brightgreen.svg"></a>	
 </p>
+[TOC]
 
-### 常用API调用
+## 常用API调用
 
 在这里，我们将展示一些常用的报表引擎API调用示例，包括：
 
